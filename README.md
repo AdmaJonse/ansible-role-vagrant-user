@@ -9,4 +9,5 @@ None.
 ## Variables
 
 `vagrant_version`: The version of vagrant on the host machine. This defaults to `v2.3.4`.
+
 `password_hash`: The hash of the password to assign to the vagrant user.
