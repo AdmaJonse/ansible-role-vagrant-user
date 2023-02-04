@@ -1,0 +1,34 @@
+---
+
+- name: Ensure the vagrant user exists
+  user:
+    name: vagrant
+    shell: /bin/bash
+    password: "{{ password_hash }}"
+  become: true
+
+- name: Ensure the vagrant user has passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^vagrant'
+    line: 'vagrant ALL=(ALL) NOPASSWD:ALL'
+  become: true
+
+- name: Ensure vagrant .ssh directory exists
+  file:
+    path: /home/vagrant/.ssh
+    state: directory
+    mode: '700'
+    owner: 'vagrant'
+    group: 'vagrant'
+  become: true
+
+- name: Ensure vagrant insecure key is in authorized keys
+  get_url:
+    url: https://github.com/hashicorp/vagrant/blob/{{ vagrant_version }}/keys/vagrant.pub
+    dest: /home/vagrant/.ssh/authorized_keys
+    owner: 'vagrant'
+    group: 'vagrant'
+    mode: '600'
+  become: true
